@@ -7,6 +7,11 @@ import models
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import date
 
+from database import Base
+from models import Animal
+
+Base.metadata.create_all(bind=engine)
+
 # Initialize FastAPI application
 app = FastAPI()
 
@@ -25,14 +30,18 @@ app.add_middleware(
 
 # Base model representing the basic attributes of an animal
 class AnimalBase(BaseModel):
+    animal_id: str
     animal_type: str
     breed: str
     color: str
     date_of_birth: date
-    name: str
-    outcome_subtype: str
-    outcome_type: str
+    date_of_outcome: date
+    name: Optional[str]
+    outcome_subtype: Optional[str]
+    outcome_type: Optional[str]
     sex_upon_outcome: str
+    location_lat: float
+    location_long: float
 
 # Animal model class with additional database-specific fields and calculated properties
 class AnimalModel(AnimalBase):
@@ -46,7 +55,7 @@ class AnimalModel(AnimalBase):
     def age_upon_outcome_in_weeks(self):
         # Calculate the age upon outcome in weeks if date_of_birth is available
         if self.date_of_birth:
-            return (date.today() - self.date_of_birth).days // 7
+            return (self.date_of_outcome - self.date_of_birth).days // 7
         return None # Return None if date_of_birth is unavailable
 
 # Dependency function to provide a new database session per request

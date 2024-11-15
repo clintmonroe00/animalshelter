@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "aac-sqlite",
+            "database": "\"C:\\Users\\Clint\\animalshelter\\aac.db\""
+        }
+    ]
+}
