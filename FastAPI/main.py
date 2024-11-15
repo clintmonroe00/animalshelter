@@ -7,6 +7,7 @@ import models
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import date
 
+# Commented out lines below allow db to be regenerated after deleting, useful when still modifying columns
 from database import Base
 from models import Animal
 
@@ -46,10 +47,27 @@ class AnimalBase(BaseModel):
 # Animal model class with additional database-specific fields and calculated properties
 class AnimalModel(AnimalBase):
     rec_num: int # Unique record number for each animal
+    age_upon_outcome: Optional[str] = None
     age_upon_outcome_in_weeks: Optional[int] = None
 
     class Config:
         from_attributes = True # Enable ORM mode for attribute mapping
+
+    @property
+    def age_upon_outcome(self):
+        # Calculate the age in a readable string format
+        if self.date_of_birth and self.date_of_outcome:
+            delta = self.date_of_outcome - self.date_of_birth
+            years = delta.days // 365
+            months = (delta.days % 365) // 30
+
+            if years >= 1:
+                return f"{years} year{'s' if years > 1 else ''}"
+            elif months >= 1:
+                return f"{months} month{'s' if months > 1 else ''}"
+            else:
+                return "0 years"
+        return None
 
     @property
     def age_upon_outcome_in_weeks(self):

@@ -24,6 +24,22 @@ class Animal(Base):
     sex_upon_outcome = Column(String)                       # Sex of the animal at the outcome
     location_lat = Column(Float)                            # Coordinate (Latitude)
     location_long = Column(Float)                           # Coordinate (Longitude)
+
+    # Define a hybrid property to calculate the age in a readable string format
+    @hybrid_property
+    def age_upon_outcome(self):
+        if self.date_of_birth and self.date_of_outcome:
+            delta = self.date_of_outcome - self.date_of_birth
+            years = delta.days // 365
+            months = (delta.days % 365) // 30
+
+            if years >= 1:
+                return f"{years} year{'s' if years > 1 else ''}"
+            elif months >= 1:
+                return f"{months} month{'s' if months > 1 else ''}"
+            else:
+                return "0 years"
+        return None
     
     # Define a hybrid property to calculate the age in weeks based on the date of birth
     @hybrid_property

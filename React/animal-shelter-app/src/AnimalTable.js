@@ -6,6 +6,7 @@ const AnimalTable = ({ animals }) => {
       <thead>
         <tr>
           <th>Animal ID</th>
+          <th>Age Upon Outcome</th>
           <th>Animal Type</th>
           <th>Breed</th>
           <th>Color</th>
@@ -22,6 +23,7 @@ const AnimalTable = ({ animals }) => {
         {animals.map((animal) => (
           <tr key={animal.id}>
             <td>{animal.animal_id}</td>
+            <td>{animal.age_upon_outcome}</td>
             <td>{animal.animal_type}</td>
             <td>{animal.breed}</td>
             <td>{animal.color}</td>
